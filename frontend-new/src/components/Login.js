@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { Form, Button, Container, Alert } from "react-bootstrap";
+import { API_BASE_URL } from "../api";
+
 import axios from "axios";
 
 const Login = () => {
@@ -30,10 +32,8 @@ const Login = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        formData
-      );
+      const res = await axios.post(`${API_BASE_URL}/api/auth/login`, formData);
+
       login(res.data.user, res.data.token);
       navigate("/tasks");
     } catch (err) {

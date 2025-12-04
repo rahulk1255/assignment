@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { Form, Button, Container, Alert } from "react-bootstrap";
+import { API_BASE_URL } from "../api";
+
 import axios from "axios";
 
 const Register = () => {
@@ -37,9 +39,10 @@ const Register = () => {
     setError("");
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        `${API_BASE_URL}/api/auth/register`,
         formData
       );
+
       login(res.data.user, res.data.token);
       navigate("/tasks");
     } catch (err) {

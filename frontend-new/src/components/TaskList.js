@@ -9,6 +9,7 @@ import {
   ListGroup,
   Spinner,
 } from "react-bootstrap";
+import { API_BASE_URL } from "../api";
 
 const TaskList = () => {
   const { token, logout } = useAuth();
@@ -26,7 +27,7 @@ const TaskList = () => {
   const fetchTasks = async () => {
     setLoadingTasks(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/tasks", {
+      const res = await axios.get(`${API_BASE_URL}/api/tasks`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks(res.data);
@@ -58,23 +59,17 @@ const TaskList = () => {
     try {
       if (editingId) {
         const res = await axios.put(
-          `http://localhost:5000/api/tasks/${editingId}`,
+          `${API_BASE_URL}/api/tasks/${editingId}`,
           formData,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setTasks(
           tasks.map((task) => (task._id === editingId ? res.data : task))
         );
       } else {
-        const res = await axios.post(
-          "http://localhost:5000/api/tasks",
-          formData,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const res = await axios.post(`${API_BASE_URL}/api/tasks`, formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setTasks([...tasks, res.data]);
       }
       setFormData({ title: "", description: "" });
@@ -95,7 +90,7 @@ const TaskList = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this task?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/tasks/${id}`, {
+      await axios.delete(`${API_BASE_URL}/api/tasks/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks(tasks.filter((task) => task._id !== id));
